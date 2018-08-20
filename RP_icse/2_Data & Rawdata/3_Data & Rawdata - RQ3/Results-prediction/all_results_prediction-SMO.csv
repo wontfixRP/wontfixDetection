@@ -3200,24 +3200,4 @@
      3195       2:no       2:no       1 (0)
 
 -----------------------------------
-RESULTS (Wontfix issue):
-TP = 1018
-FP = 3
-TN = 0
-TN = 2174
-Precision = 0.997061704211557
-Recall = 1
-Fscore = 0.998528690534576
-Fmeasure = 0.998528690534576
-Accuracy = 0.99906103286385
------------------------------------
-RESULTS (Non-wontfix issue):
-TP = 2174
-FP = 0
-TN = 3
-TN = 1018
-Precision = 1
-Recall = 0.998621956821314
-Fscore = 0.999310503332567
-Fmeasure = 0.999310503332567
-Accuracy = 0.99906103286385
+

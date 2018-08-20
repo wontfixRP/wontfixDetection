@@ -20,10 +20,6 @@ Description of the content:
        automatically create training and test set matrices,
        and classify classify the issues for the considered C, Java, Javacript and Ruby projects.
        
-    d) "5_projects-statistics.R" is the R script we used to 
-       automatically create additional statistics (number of wontfix and
-       non-wontfix issues) we reported in the paper for the C, Java, 
-       Javacript and Ruby projects.
        
 
 2) "2_Data & Rawdata" folder contains all the data and rawdata used to answer the research questions

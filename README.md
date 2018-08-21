@@ -32,10 +32,10 @@ Description of the content:
    	b) In "2_Rawdata - RQ1 - RQ2/RQ1_and_RQ2_raw.csv" are reported the M_opening and M_closing labels assigned 
       to each issue in the manual inspected sample, as well as the values of each collected metric.
       
-    c) "3_Data & Rowdata - RQ3" folder contains the detailed information about 
+    c) "3_Data & Rawdata - RQ3" folder contains the detailed information about 
        - the training and test sets used to runk the Weka tools ("Test-set" "Training-set" folder
-          under "3_Data & Rowdata - RQ3") 
-       - the results of the prediction (under "3_Data & Rowdata - RQ3/Results-prediction") 
+          under "3_Data & Rawdata - RQ3") 
+       - the results of the prediction (under "3_Data & Rawdata - RQ3/Results-prediction") 
        - "WEKA-stable-3-8" folder contains the actual "Weka version used for this research"
            
         

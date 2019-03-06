@@ -1,3 +1,5 @@
+#AUTHOR @Sebastiano Panichella
+
 library(stringr)
 
 

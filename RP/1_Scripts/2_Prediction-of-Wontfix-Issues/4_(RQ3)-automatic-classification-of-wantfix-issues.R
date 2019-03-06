@@ -1,3 +1,7 @@
+#AUTHOR @Sebastiano Panichella
+
+
+
 library(stringr)
 library("stringr")
 # create a first textmatrix with some files

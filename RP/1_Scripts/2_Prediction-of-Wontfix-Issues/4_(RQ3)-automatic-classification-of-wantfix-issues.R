@@ -10,14 +10,13 @@ library(lsa)
 library(stringr)
 library(foreign)
 dyn.load('/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/server/libjvm.dylib')
-library(rJava)
-library(JGR)
+library(rJava) #in case of problems installa http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html, then run: "sudo R CMD javareconf" from command line
 library(rpart)
 library(bigmemory)
 library(farff)
 library(foreign)
-library(rio)
-#library(RWeka)
+library(rio) # install_formats()
+#library(JGR)
 
 
 deleteFiles<-function(folder){
@@ -70,6 +69,49 @@ td_testSet<-paste(td,"test_set", sep="/")
 
 deleteFiles(td_trainingSet)
 deleteFiles(td_testSet)
+
+#lines added/modified in the EMSE major revision
+stats1<-non_wontfix_issues_data[,c(1,6)]
+stats2<-wontfix_issues_data[,c(1,3)]
+stats3<- rbind(stats1,stats2)
+p_names<-as.character(unique(stats3$project_name))
+# we compute the number of issues per project
+i<-1
+issue_pp_C<-0
+issue_pp_Java<-0
+issue_pp_JavaScript<-0
+issue_pp_Ruby<-0
+for(i in 1: length(p_names))
+{
+  issue_pp<-c(issue_pp,length(which(stats3$project_name==p_names[i])))
+  if(unique(stats3$project_language[which(stats3$project_name==p_names[i])]) == "C")
+  {
+    issue_pp_C<-c(issue_pp_C,length(which(stats3$project_name==p_names[i])))
+  }
+  if(unique(stats3$project_language[which(stats3$project_name==p_names[i])]) == "Java")
+  {
+    issue_pp_Java<-c(issue_pp_Java,length(which(stats3$project_name==p_names[i])))
+  }
+  if ( (unique(stats3$project_language[which(stats3$project_name==p_names[i])]) == "JavaScript") || (unique(stats3$project_language[which(stats3$project_name==p_names[i])]) == "TypeScript"))
+  {
+    issue_pp_JavaScript<-c(issue_pp_JavaScript,length(which(stats3$project_name==p_names[i])))
+  }
+  if(unique(stats3$project_language[which(stats3$project_name==p_names[i])]) == "Ruby")
+  {
+    issue_pp_Ruby<-c(issue_pp_Ruby,length(which(stats3$project_name==p_names[i])))
+  }
+}
+issue_pp_C<- issue_pp_C[-1]
+median(issue_pp_C)
+issue_pp_Java<- issue_pp_Java[-1]
+median(issue_pp_Java)
+issue_pp_JavaScript<- issue_pp_JavaScript[-1]
+median(issue_pp_JavaScript)
+issue_pp_Ruby<- issue_pp_Ruby[-1]
+median(issue_pp_Ruby)
+issue_pp<- issue_pp[-1]
+median(issue_pp)
+#end of lines added in the EMSE major revision
 
 non_wontfix_issues_data$TitleIssue <- as.character(non_wontfix_issues_data$TitleIssue)
 non_wontfix_issues_data$DescriptionIssue <- as.character(non_wontfix_issues_data$DescriptionIssue)
@@ -243,9 +285,14 @@ close(con)
 con <- file(path_test_data_nfr_arff, "r", blocking = FALSE)
 test_set<- readLines(con) # empty
 close(con)
+
+#(from now on) CODE UPDATED FOR MAJOR AT EMSE:
 #preprocessing arff file for the prediction
 training_set<- str_replace(training_set," string"," NUMERIC")
 test_set<- str_replace(test_set," string"," NUMERIC")
+training_set<- str_replace(training_set," numeric"," NUMERIC")
+test_set<- str_replace(test_set," numeric"," NUMERIC")
+
 training_set<- str_replace_all(training_set,"'","")
 test_set<- str_replace_all(test_set,"'","")
 #we then change the type of the "nfr" attribute
@@ -303,9 +350,9 @@ write(test_set,path_test_data_nfr_arff)
 
 # we set the ML model to use for the classification
 #J48
-# ML_model_experimented<-"J48"
-# ML_model_in_weka <- "weka.classifiers.trees.J48"
-# name__of_the_saved_ML_model_in_weka <- "j48-trained.model"
+#ML_model_experimented<-"J48"
+#ML_model_in_weka <- "weka.classifiers.trees.J48"
+#name__of_the_saved_ML_model_in_weka <- "j48-trained.model"
 #weka_command <- " -C 0.25 -M 2 -t "
 
 #Logistic-Regression
@@ -321,15 +368,18 @@ name__of_the_saved_ML_model_in_weka <- "SMO-trained.model"
 weka_command <- " -t "
 
 #Naive Bayes
-#  ML_model_experimented<-"NaiveBayes"
-#  ML_model_in_weka <- "weka.classifiers.bayes.NaiveBayes"
-#  name__of_the_saved_ML_model_in_weka <- "NaiveBayes-trained.model"
-#  weka_command <- " -t "
+#ML_model_experimented<-"NaiveBayes"
+#ML_model_in_weka <- "weka.classifiers.bayes.NaiveBayes"
+#name__of_the_saved_ML_model_in_weka <- "NaiveBayes-trained.model"
+#weka_command <- " -t "
 
 #java -classpath $CLASSPATH:weka.jar weka.classifiers.functions.Logistic -h
 command<-paste("cd ",path_weka," && java  -classpath $CLASSPATH:weka.jar ",ML_model_in_weka, weka_command,path_training_data_nfr_arff,"-d ",name__of_the_saved_ML_model_in_weka)
 #command<-paste("cd ",path_weka," && ./run.sh")
 outcome_execution<-as.character(system(command,intern = TRUE))
+
+#ALL THE FOLLOWING PARTS CAN BE DONE MANUALLY BY FOLLOWING THE STEPS INDICATED HERE FOR RE-USING TRAINED MODELS IN WEKA: 
+# https://machinelearningmastery.com/save-machine-learning-model-make-predictions-weka/
 
 command<-paste("cd ",path_weka," && java -classpath $CLASSPATH:weka.jar ",ML_model_in_weka, " -p 9 -l ",name__of_the_saved_ML_model_in_weka, " -T ",path_test_data_nfr_arff)
 #command<-paste("cd ",path_weka," && ./run.sh")
@@ -350,8 +400,79 @@ Accuracy <- (length(TP) + length(TN) ) / ( length(TP) + length(TN)  + length(FP)
 pos<-length(results_prediction)+1
 results_prediction[pos]<- paste("-----------------------------------")
 
-path_to_save_results <- str_replace(path_all_results_prediction, "_prediction", paste("_prediction-",ML_model_experimented,sep=""))
+# we add the value of precision, recall and F-measure:...
+TP_2 <- results_prediction[which(str_detect(results_prediction,"([0-9]+:no( )+[0-9]+:no)"))]
+FP_2 <- results_prediction[which(str_detect(results_prediction,"([0-9]+:no( )+[0-9]+:yes)"))]
+FN_2 <- results_prediction[which(str_detect(results_prediction,"([0-9]+:yes( )+[0-9]+:no)"))]
+TN_2 <- results_prediction[which(str_detect(results_prediction,"([0-9]+:yes( )+[0-9]+:yes)"))]
 
+
+precision_2 <- length(TP_2) / (length(TP_2)+ length(FP_2))
+recall_2 <- length(TP_2) / (length(TP_2)+ length(FN_2))
+Fscore_2 <- 2 * length(TP_2) / ( 2 * length(TP_2) + length(FP_2)+ length(FN_2))
+Fmeasure_2 <- 2 * precision_2 * recall_2 / (precision_2 + recall_2)
+Accuracy_2 <- (length(TP_2) + length(TN_2) ) / ( length(TP_2) + length(TN_2)  + length(FP_2)+ length(FN_2))
+
+
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("RESULTS (Wontfix issue):")
+
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("TP =",length(TP))
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("FP =",length(FP))
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("TN =",length(FN))
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("TN =",length(TN))
+
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Precision =",precision)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Recall =",recall)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Fscore =",Fscore)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Fmeasure =",Fmeasure)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Accuracy =",Accuracy)
+
+
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("-----------------------------------")
+
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("RESULTS (Non-wontfix issue):")
+
+
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("TP =",length(TP_2))
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("FP =",length(FP_2))
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("TN =",length(FN_2))
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("TN =",length(TN_2))
+
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Precision =",precision_2)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Recall =",recall_2)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Fscore =",Fscore_2)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Fmeasure =",Fmeasure_2)
+pos<-length(results_prediction)+1
+results_prediction[pos]<- paste("Accuracy =",Accuracy_2)
+
+results_prediction
+
+#we extract the information about the predicted classification
+#results_prediction <- as.character(na.omit(str_extract(results_prediction," ([0-9])+:([A-z])+")))
+#results_prediction <- str_replace(results_prediction," ([0-9])+:","")
+
+path_to_save_results <- str_replace(path_all_results_prediction, "_prediction", paste("_prediction-",ML_model_experimented,sep=""))
+print("SMO")
 write(results_prediction,path_to_save_results)
 
 

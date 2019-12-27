@@ -10,6 +10,7 @@ Description of the content:
     
     a) "1_issue-data-extraction.R" is the R script we used to collect the initial information
        abou the C, Java, Javacript and Ruby projects
+       
     b) "2_issue-fine-grained-data-extraction.R" and "3_issue-data-extraction-of-further issue.R"
        are the R scripts we used to extract more fine-grained data of wontfix issues,
        (e.g., issue title, issue comments, date of opening/closing the issue, etc.).

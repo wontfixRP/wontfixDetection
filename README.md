@@ -11,15 +11,15 @@ Description of the content:
     a) "1_issue-data-extraction.R" is the R script we used to collect the initial information
        abou the C, Java, Javacript and Ruby projects
        
-    b) "2_issue-fine-grained-data-extraction.R" and "3_issue-data-extraction-of-further issue.R"
+    b) "2_issue-fine-grained-data-extraction.R", "3_issue-data-extraction-of-further issue.R", "4_issue-data-extraction-of-further issue.R"
        are the R scripts we used to extract more fine-grained data of wontfix issues,
        (e.g., issue title, issue comments, date of opening/closing the issue, etc.).
        
     Under "the sub-folder "2_Prediction-of-Wontfix-Issues":
     
-    c) "4_(RQ3)-automatic-classification-of-wantfix-issues.R" is the R script we used to 
+    c) "5_(RQ3)-automatic-classification-of-wantfix-issues.R" is the R script we used to 
        automatically create training and test set matrices,
-       and classify classify the issues for the considered C, Java, Javacript and Ruby projects.
+       and classify classify the issues for the considered C# projects.
        
        
 

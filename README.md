@@ -17,7 +17,7 @@ Description of the content:
        
     Under "the sub-folder "2_Prediction-of-Wontfix-Issues":
     
-    c) "5_(RQ3)-automatic-classification-of-wantfix-issues.R" is the R script we used to 
+    c) "5_(RQ3)-automatic-classification-of-wantfix-issuesLastVersion.R" is the R script we used to 
        automatically create training and test set matrices,
        and classify classify the issues for the considered C# projects.
        

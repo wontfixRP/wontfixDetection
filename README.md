@@ -30,7 +30,7 @@ Description of the content:
    	    under "1_Scripts/1_Data_Collection".
    	    
    		
-   	b) In "2_Rawdata - RQ1 - RQ2/RQ1_and_RQ2_raw.csv" are reported the M_opening and M_closing labels assigned 
+   	b) In "2_Rawdata - RQ1 - RQ2/RQ1_and_RQ2_raw_final.csv" are reported the M_opening and M_closing labels assigned 
       to each issue in the manual inspected sample, as well as the values of each collected metric.
       
     c) "3_Data & Rawdata - RQ3" folder contains the detailed information about
@@ -45,6 +45,8 @@ Description of the content:
        
        - "WEKA-stable-3-8" folder contains the actual "Weka version used for this research"
            
+3) "3_Final Dataset" folder contains the final data collection used in our research.
+ 
         
 
 

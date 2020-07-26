@@ -14,12 +14,10 @@ library(bigmemory)
 library(farff)
 library(foreign)
 library(rio) # install_formats()
-### NEW CODE ADDED IN THE SECOND EMSE REVISION
 library(textclean)
 #test library
 #x <- c(  "<bold>Random</bold> text with symbols: &nbsp; ;","hello, how are you?<br />")
 #x<- replace_html(x)
-### END NEW CODE ADDED IN THE SECOND EMSE REVISION
 
 #library(JGR)
 
@@ -38,7 +36,6 @@ deleteFiles<-function(folder){
   }#for..
 }
 
-### NEW CODE ADDED IN THE SECOND EMSE REVISION
 
 #paths input
 path_non_wontfix_issues_data_with_duplicates<-"../Projects-list/projectsInfo-additional-non-wontfix-data-RQ3.csv"
